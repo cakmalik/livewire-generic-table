@@ -1,6 +1,10 @@
 <?php
 
-namespace App\Livewire;
+declare(strict_types=1);
+
+namespace Cakmalik\LivewireGenericTable\Http\Livewire;
+
+use Illuminate\Contracts\View\View;
 
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
@@ -108,58 +112,6 @@ class GenericTable extends Component
       }
     }
   }
-  // protected function applyBaseConditions(Builder $query)
-  // {
-  //     if (empty($this->baseConditions)) return;
-  //
-  //     foreach ($this->baseConditions as $condition) {
-  //         if (is_array($condition) && count($condition) >= 2) {
-  //             $field = $condition[0];
-  //             $operator = count($condition) === 3 ? $condition[1] : '=';
-  //             $value = count($condition) === 3 ? $condition[2] : $condition[1];
-  //
-  //             if (str_contains($field, '.')) {
-  //                 [$relation, $relField] = explode('.', $field, 2);
-  //
-  //                 if ($operator === '!=' || $operator === 'not') {
-  //                     $query->whereDoesntHave($relation, function ($sub) use ($relField, $value) {
-  //                         $sub->where($relField, '=', $value);
-  //                     });
-  //                 } else {
-  //                     $query->whereHas($relation, function ($sub) use ($relField, $operator, $value) {
-  //                         $sub->where($relField, $operator, $value);
-  //                     });
-  //                 }
-  //             } else {
-  //                 $query->where($field, $operator, $value);
-  //             }
-  //         }
-  //     }
-  // }
-  //
-  // protected function applyBaseConditions(Builder $query)
-  // {
-  //     if (empty($this->baseConditions)) return;
-  //
-  //     foreach ($this->baseConditions as $condition) {
-  //         if (is_array($condition) && count($condition) >= 2) {
-  //             $field = $condition[0];
-  //             $operator = count($condition) === 3 ? $condition[1] : '=';
-  //             $value = count($condition) === 3 ? $condition[2] : $condition[1];
-  //
-  //             if (str_contains($field, '.')) {
-  //                 // Handle relasi
-  //                 [$relation, $relField] = explode('.', $field, 2);
-  //                 $query->whereHas($relation, function ($sub) use ($relField, $operator, $value) {
-  //                     $sub->where($relField, $operator, $value);
-  //                 });
-  //             } else {
-  //                 $query->where($field, $operator, $value);
-  //             }
-  //         }
-  //     }
-  // }
-
 
   protected function applyQueryParams(Builder $query)
   {
@@ -390,47 +342,8 @@ class GenericTable extends Component
     $this->resetPage();
   }
 
-  // public function render()
-  // {
-  //     if (!isset($this->model) || !class_exists($this->model)) {
-  //         $message = isset($this->model) ? "Model class {$this->model} tidak ditemukan." : "Property \$model belum diset pada GenericTable.";
-  //         throw new \Exception($message);
-  //     }
-  //
-  //     $query = ($this->model)::query();
-  //
-  //     $this->applyBaseConditions($query);
-  //
-  //     $this->applyQueryParams($query);
-  //     $this->applySearch($query);
-  //
-  //     if ($this->customQueryCallback && is_callable($this->customQueryCallback)) {
-  //         call_user_func($this->customQueryCallback, $query);
-  //     }
-  //
-  //     if ($this->sortField && !$this->isAccessorMethod($this->sortField)) {
-  //         $query->orderBy($this->sortField, $this->sortDirection);
-  //     }
-  //
-  //     $rows = $query->paginate($this->perPage);
-  //
-  //     if ($this->sortField && $this->isAccessorMethod($this->sortField)) {
-  //         $sortedItems = $rows->getCollection()->sortBy(function ($item) {
-  //             return $item->{$this->sortField};
-  //         }, SORT_REGULAR, $this->sortDirection === 'desc');
-  //
-  //         $rows->setCollection($sortedItems->values());
-  //     }
-  //
-  //     return view('livewire.generic-table', [
-  //         'rows'    => $rows,
-  //         'columns' => $this->columns,
-  //         'model'   => $this->model,
-  //     ]);
-  // }
 
-
-  public function render()
+  public function render(): View
   {
     if (!isset($this->model) || !class_exists($this->model)) {
       $message = isset($this->model)
@@ -495,8 +408,8 @@ class GenericTable extends Component
       $rows->setCollection($sortedItems->values());
     }
 
-    return view('livewire.generic-table', [
-      'rows' => $rows,
+    return view('livewire-generic-table::livewire.generic-table', [
+      'rows' => $this->rows,
       'columns' => $this->columns,
       'model' => $this->model,
     ]);
