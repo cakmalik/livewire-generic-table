@@ -408,6 +408,9 @@ class GenericTable extends Component
       $rows->setCollection($sortedItems->values());
     }
 
+    $columns = $this->columns;
+    $model = $this->model;
+
     return view('livewire-generic-table::livewire.generic-table', [
       'rows' => $rows,
       'columns' => $columns,
