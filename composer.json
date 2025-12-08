@@ -1,0 +1,31 @@
+{
+    "name": "cakmalik/livewire-generic-table",
+    "description": "Reusable Livewire Generic Table Component for Laravel",
+    "keywords": ["laravel", "livewire", "table", "component", "cakmalik"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cak Malik"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CakMalik\\LivewireGenericTable\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CakMalik\\LivewireGenericTable\\Providers\\LivewireGenericTableServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "livewire/livewire": "^3.0"
+    }
+}
