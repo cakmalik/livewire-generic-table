@@ -66,13 +66,12 @@
                                     default => 'text-left',
                                 };
                             @endphp
-@php
-    $width = $column['width'] ?? '200px';
-@endphp
+                            @php
+                                $width = $column['width'] ?? '200px';
+                            @endphp
 
-<td
-    class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200 {{ $alignClass }} truncate"
-    style="max-width: {{ $width }}">
+                            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200 {{ $alignClass }} truncate"
+                                style="max-width: {{ $width }}">
                                 {{-- 🔹 Actions --}}
                                 @if (!empty($column['sub_fields']))
                                     <div class="flex flex-col space-y-1">
@@ -92,31 +91,40 @@
                                             @php
                                                 $showAction = true;
 
-                                                // Jika ada field 'condition_field' dan 'condition_value', tampilkan hanya jika cocok
+                                                // Jika ada field 'condition_field' dan 'condition_value'
                                                 if (isset($action['condition_field'], $action['condition_value'])) {
                                                     $showAction =
                                                         data_get($row, $action['condition_field']) ==
                                                         $action['condition_value'];
                                                 }
 
-                                                // Kondisi tambahan: jika event adalah 'editAction', periksa permission update
-                                                if ($showAction && ($action['event'] ?? null) == 'editAction') {
-                                                    $showAction = auth()
-                                                        ->user()
-                                                        ?->can($permissionPrefix . '.update');
+                                                $event = $action['event'] ?? null;
+
+                                                // ✔ Kondisi edit
+                                                if ($showAction && $event === 'editAction') {
+                                                    $showAction =
+                                                        !$permissionPrefix ||
+                                                        auth()
+                                                            ->user()
+                                                            ?->can($permissionPrefix . '.update');
                                                 }
 
-                                                if ($showAction && ($action['event'] ?? null) == 'showAction') {
-                                                    $showAction = auth()
-                                                        ->user()
-                                                        ?->can($permissionPrefix . '.view');
+                                                // ✔ Kondisi show
+                                                if ($showAction && $event === 'showAction') {
+                                                    $showAction =
+                                                        !$permissionPrefix ||
+                                                        auth()
+                                                            ->user()
+                                                            ?->can($permissionPrefix . '.view');
                                                 }
 
-                                                // Kondisi tambahan: jika event adalah 'deleteAction', periksa permission delete
-                                                if ($showAction && ($action['event'] ?? null) == 'deleteAction') {
-                                                    $showAction = auth()
-                                                        ->user()
-                                                        ?->can($permissionPrefix . '.delete');
+                                                // ✔ Kondisi delete
+                                                if ($showAction && $event === 'deleteAction') {
+                                                    $showAction =
+                                                        !$permissionPrefix ||
+                                                        auth()
+                                                            ->user()
+                                                            ?->can($permissionPrefix . '.delete');
                                                 }
                                             @endphp
 
@@ -124,7 +132,7 @@
                                                 @continue
                                             @endif
 
-
+                                            {{-- RENDER ACTION BUTTON --}}
                                             @if (($action['type'] ?? '') === 'text')
                                                 <button
                                                     @click.stop="$dispatch('{{ $action['event'] ?? '' }}', { id: {{ $row->id }} })"
@@ -191,8 +199,11 @@
 
                                                 // Nilai default jika tidak ditemukan
                                                 $defaultColor = $badgeCfg['default'] ?? 'gray';
-                                                $defaultLabel = $badgeCfg['default_label']
-                                                    ?? strtoupper($value instanceof \BackedEnum ? $value->value : (string) $value);
+                                                $defaultLabel =
+                                                    $badgeCfg['default_label'] ??
+                                                    strtoupper(
+                                                        $value instanceof \BackedEnum ? $value->value : (string) $value,
+                                                    );
 
                                                 // Variabel awal
                                                 $color = $defaultColor;

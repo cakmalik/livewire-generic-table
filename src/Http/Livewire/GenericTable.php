@@ -423,4 +423,16 @@ class GenericTable extends Component
   {
     $this->render();
   }
+
+
+  public function canPerform(string $action): bool
+  {
+    // Jika permissionPrefix kosong → izinkan semua action
+    if (!$this->permissionPrefix) {
+      return true;
+    }
+
+    // Jika tidak → cek permission
+    return auth()->user()?->can("{$this->permissionPrefix}.{$action}") ?? false;
+  }
 }
