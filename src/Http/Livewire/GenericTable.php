@@ -409,9 +409,9 @@ class GenericTable extends Component
     }
 
     return view('livewire-generic-table::livewire.generic-table', [
-      'rows' => $this->rows,
-      'columns' => $this->columns,
-      'model' => $this->model,
+      'rows' => $rows,
+      'columns' => $columns,
+      'model' => $model,
     ]);
   }
 
