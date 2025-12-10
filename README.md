@@ -29,7 +29,7 @@ composer require your-vendor/generic-table
 If using Laravel < 10.21, publish views:
 
 ```bash
-php artisan vendor:publish --tag=generic-table-views
+php artisan vendor:publish --tag=livewire-generic-table-views
 ```
 
 ---
