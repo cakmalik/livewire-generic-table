@@ -158,19 +158,38 @@
                                     @switch($column['format'])
                                         @case('image')
                                             @php
-                                                $imgUrl = $value
+                                                $fileUrl = $value
                                                     ? (Str::startsWith($value, ['http://', 'https://'])
                                                         ? $value
                                                         : asset($value))
                                                     : $column['default'] ?? asset('images/no-images.jpg');
+
+                                                // Deteksi ekstensi
+                                                $ext = strtolower(pathinfo($fileUrl, PATHINFO_EXTENSION));
+
+                                                $isVideo = in_array($ext, ['mp4', 'mov', 'webm']);
                                                 $width = $column['width'] ?? 60;
                                                 $height = $column['height'] ?? 60;
                                                 $rounded = $column['rounded'] ?? false;
                                             @endphp
 
-                                            <img src="{{ $imgUrl }}" alt="Image" width="{{ $width }}"
-                                                height="{{ $height }}"
-                                                class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }}" />
+                                            @if ($isVideo)
+                                                {{-- Thumbnail video (poster) --}}
+                                                <a href="{{ $fileUrl }}" data-fancybox data-type="video">
+                                                    <video width="{{ $width }}" height="{{ $height }}"
+                                                        class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer"
+                                                        muted>
+                                                        <source src="{{ $fileUrl }}" type="video/mp4">
+                                                    </video>
+                                                </a>
+                                            @else
+                                                {{-- Image --}}
+                                                <a href="{{ $fileUrl }}" data-fancybox>
+                                                    <img src="{{ $fileUrl }}" width="{{ $width }}"
+                                                        height="{{ $height }}"
+                                                        class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer" />
+                                                </a>
+                                            @endif
                                         @break
 
                                         @case('avatar')
@@ -315,4 +334,29 @@
         <div class="mt-3">
             {{ $rows->links() }}
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                Fancybox.bind('[data-fancybox]', {
+                    Thumbs: false,
+                    Toolbar: {
+                        display: [{
+                                id: 'counter',
+                                position: 'center'
+                            },
+                            'zoom',
+                            'close',
+                        ],
+                    },
+                });
+            });
+
+            document.addEventListener('livewire:navigated', () => {
+                Fancybox.bind('[data-fancybox]');
+            });
+
+            document.addEventListener('livewire:load', () => {
+                Fancybox.bind('[data-fancybox]');
+            });
+        </script>
     </div>
