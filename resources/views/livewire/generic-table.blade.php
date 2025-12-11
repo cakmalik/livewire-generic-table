@@ -174,11 +174,11 @@
                                             @endphp
 
                                             @if ($isVideo)
-                                                <a href="{{ $fileUrl }}" data-fancybox data-type="video">
+                                                <a href="{{ $fileUrl }}" data-fancybox="videos">
                                                     <video width="{{ $width }}" height="{{ $height }}"
                                                         class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer"
                                                         muted
-                                                        onerror="this.outerHTML = `<img src='{{ asset('images/error-image.png') }}' width='{{ $width }}' height='{{ $height }}' class='{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer' />`">
+                                                        onerror="this.outerHTML = `<img src='{{ asset('images/error-image.png') }}' width='{{ $width }}' height='{{ $height }}' class='{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer'/>`">
                                                         <source src="{{ $fileUrl }}" type="video/mp4">
                                                     </video>
                                                 </a>
