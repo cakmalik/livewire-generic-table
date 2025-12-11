@@ -174,11 +174,11 @@
                                             @endphp
 
                                             @if ($isVideo)
-                                                {{-- Thumbnail video (poster) --}}
                                                 <a href="{{ $fileUrl }}" data-fancybox data-type="video">
                                                     <video width="{{ $width }}" height="{{ $height }}"
                                                         class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer"
-                                                        muted>
+                                                        muted
+                                                        onerror="this.outerHTML = `<img src='{{ asset('images/error-image.png') }}' width='{{ $width }}' height='{{ $height }}' class='{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer' />`">
                                                         <source src="{{ $fileUrl }}" type="video/mp4">
                                                     </video>
                                                 </a>
@@ -187,7 +187,9 @@
                                                 <a href="{{ $fileUrl }}" data-fancybox>
                                                     <img src="{{ $fileUrl }}" width="{{ $width }}"
                                                         height="{{ $height }}"
-                                                        class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer" />
+                                                        class="{{ $rounded ? 'rounded-full object-cover' : 'object-cover' }} cursor-pointer"
+                                                        onerror="this.onerror=null; this.src='{{ asset('images/error-image.png') }}'; this.removeAttribute('onerror');" />
+
                                                 </a>
                                             @endif
                                         @break
