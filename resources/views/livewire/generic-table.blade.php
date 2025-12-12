@@ -291,15 +291,21 @@
                                         @break
 
                                         @case('date')
-                                            @if (!empty($value))
-                                                {{ \Carbon\Carbon::parse($value)->format($column['format_date'] ?? 'd/m/Y') }}
-                                            @endif
+                                            @php
+                                                $isValidDate =
+                                                    !empty($value) && $value !== '-' && strtotime($value) !== false;
+                                            @endphp
+
+                                            {{ $isValidDate ? \Carbon\Carbon::parse($value)->format($column['format_date'] ?? 'd/m/Y') : '-' }}
                                         @break
 
                                         @case('datetime')
-                                            @if (!empty($value))
-                                                {{ \Carbon\Carbon::parse($value)->format($column['format_date'] ?? 'd/m/Y H:i') }}
-                                            @endif
+                                            @php
+                                                $isValidDate =
+                                                    !empty($value) && $value !== '-' && strtotime($value) !== false;
+                                            @endphp
+
+                                            {{ $isValidDate ? \Carbon\Carbon::parse($value)->format($column['format_date'] ?? 'd/m/Y H:i') : '-' }}
                                         @break
 
                                         @default
