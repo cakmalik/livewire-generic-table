@@ -209,6 +209,16 @@
                                             @endif
                                         @break
 
+                                        @case('helper')
+                                            @php
+                                                $helperName = $column['helper_method'] ?? null;
+                                            @endphp
+
+                                            @if (!empty($helperName) && function_exists($helperName))
+                                                {{ $helperName($value) }}
+                                            @endif
+                                        @break
+
                                         @case('badge')
                                             @php
                                                 $badgeCfg = $column['badge'] ?? [];
