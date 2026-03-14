@@ -350,10 +350,10 @@ class GenericTable extends Component
         $this->resetPage();
     }
 
-    #[On('reset-page')]
-    public function resetPage()
+    #[On('pageReset')]
+    public function pageReset()
     {
-        $this->resetPage(); // method bawaan Livewire WithPagination
+        $this->resetPage();
     }
 
     public function sortBy(string $field)
@@ -464,4 +464,3 @@ class GenericTable extends Component
         return auth()->user()?->can("{$this->permissionPrefix}.{$action}") ?? false;
     }
 }
-
