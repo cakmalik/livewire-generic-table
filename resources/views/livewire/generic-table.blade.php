@@ -76,7 +76,22 @@
                                 @if (!empty($column['sub_fields']))
                                     <div class="flex flex-col space-y-1">
                                         {{-- Main field --}}
-                                        <div>{{ data_get($row, $field) }}</div>
+                                        {{-- Main field --}}
+                                        <div>
+                                            @php
+                                                $mainVal = data_get($row, $field);
+                                                $helperName = $column['helper_method'] ?? null;
+                                                if (
+                                                    !empty($column['format']) &&
+                                                    $column['format'] === 'helper' &&
+                                                    !empty($helperName) &&
+                                                    function_exists($helperName)
+                                                ) {
+                                                    $mainVal = $helperName($mainVal);
+                                                }
+                                            @endphp
+                                            {{ $mainVal }}
+                                        </div>
 
                                         {{-- Sub fields --}}
                                         @foreach ($column['sub_fields'] as $subField)
