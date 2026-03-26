@@ -318,6 +318,10 @@
                                             {{ $isValidDate ? \Carbon\Carbon::parse($value)->format($column['format_date'] ?? 'd/m/Y H:i') : '-' }}
                                         @break
 
+                                        @case('html')
+                                            {!! $value !!}
+                                        @break
+
                                         @default
                                             {{ $value }}
                                     @endswitch
