@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -24,7 +25,7 @@ class GenericTable extends Component
 
     public array $columns = [];
 
-    #[Reactive]
+    #[Url]
     public array $queryParams = [];
 
     public array $baseConditions = [];
@@ -35,25 +36,22 @@ class GenericTable extends Component
 
     public $customQueryCallback = null;
 
+    #[Url]
     public string $search = '';
 
+    #[Url]
     public ?string $sortField = null;
 
+    #[Url]
     public string $sortDirection = 'asc';
 
+    #[Url]
     public int $perPage = 10;
 
     public ?bool $filterPerPage = true;
 
     public ?string $permissionPrefix = null;
 
-    protected $queryString = [
-        'search',
-        'sortField',
-        'sortDirection',
-        'perPage',
-        'page' => ['as' => 'tablePage'],
-    ];
 
     public function mount(
         ?string $model = null,
@@ -73,7 +71,12 @@ class GenericTable extends Component
             $this->model = $model;
         }
         $this->columns = $columns;
-        $this->queryParams = $queryParams;
+
+        // Merge queryParams from parent with existing ones (e.g. from URL)
+        // This prevents overwriting filters when navigating back.
+        // We put $this->queryParams (from URL) second so it takes precedence.
+        $this->queryParams = array_merge($queryParams, $this->queryParams);
+
         $this->baseConditions = $baseConditions;
         $this->defaultSortField = $defaultSortField;
         $this->defaultSortDirection = $defaultSortDirection;
